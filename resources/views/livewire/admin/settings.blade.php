@@ -13,10 +13,10 @@ class extends Component {
 
 	private const SETTINGS_KEYS = ['pagination', 'excerptSize', 'title', 'subTitle', 'newPost'];
 
-	#[Validate('required|max:30')]
+	#[Validate('required|max:50')]
 	public string $title;
 
-	#[Validate('required|max:50')]
+	#[Validate('required|max:80')]
 	public string $subTitle;
 
 	#[Validate('required|integer|between:2,12')]

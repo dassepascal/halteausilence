@@ -16,12 +16,12 @@
 
 <body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
     {{-- HERO --}}
-    <div class="min-h-[35vw] hero" style="background-image: url({{ asset('storage/hero.jpg') }});">
+    <div class="min-h-[35vw] hero" style="background-image: url({{ asset('storage/background_title.png') }});">
         <div class="bg-opacity-60 hero-overlay"></div>
         <a href="{{ '/' }}">
             <div class="text-center hero-content text-neutral-content">
                 <div>
-                    <h1 class="mb-5 text-4xl font-bold sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
+                    <h1 class="mb-5 text-4xl font-bold sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl">
                         {{ config('app.title')}}
                     </h1>
                     <p class="mb-5 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
@@ -46,7 +46,7 @@
         {{-- SLOT --}}
         <x-slot:content>
             {{ $slot }}
-              
+
         </x-slot:content>
 
     </x-main>
