@@ -37,6 +37,7 @@ new class() extends Component {
         @else
             <x-menu-item title="{{ __('Login') }}" link="/login" />
         @endif
+          <x-menu-item title="{{ __('About') }}" link="/about" />
         @foreach ($menus as $menu)
         @if($menu->submenus->isNotEmpty())
             <x-menu-sub title="{{ $menu->label }}">

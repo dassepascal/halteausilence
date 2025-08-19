@@ -12,6 +12,7 @@ Volt::route('/search/{param}', 'index')->name('posts.search');
 Volt::route('/pages/{page:slug}', 'pages.show')->name('pages.show');
 Volt::route('/contact', 'contact-form')->name('contact');
 Volt::route('/calendar', 'calendar')->name('calendar');
+Volt::route('/about', 'about')->name('about');
 
 Route::middleware('guest')->group(function () {
     Volt::route('/login', 'auth.login')->name('login');
