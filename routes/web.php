@@ -17,7 +17,7 @@ Volt::route('/pages/{page:slug}', 'pages.show')->name('pages.show');
 Volt::route('/contact', 'contact-form')->name('contact');
 Volt::route('/calendar', 'calendar')->name('calendar');
 Volt::route('/about', 'about')->name('about');
-Volt::route('/newletter', 'newletter')->name('subscrbe-newletter');
+
 
 // Routes minimales pour les fonctionnalités newsletter dans les emails
 Route::get('/newsletter/{newsletter}/track/open/{user}', function (Request $request, Newsletter $newsletter, User $user) {
@@ -104,6 +104,7 @@ Route::middleware('auth')->group(function () {
             Volt::route('/images/{year}/{month}/{id}/edit', 'admin.images.edit')->name('images.edit');
             Volt::route('/settings', 'admin.settings')->name('settings');
             Volt::route('/contacts', 'admin.contact-list')->name('contact-list');
+            
             Volt::route('/newsletters', 'admin.newsletters')->name('admin.newsletters')->middleware('can:manage-newsletters');
             Volt::route('/newsletter/subscription','admin.newsletter.subscription')->name('newsletter.subscription');
         });

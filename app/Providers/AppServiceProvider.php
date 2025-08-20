@@ -7,6 +7,7 @@ use App\Models\Setting;
 use Illuminate\View\View;
 use Illuminate\Support\Facades;
 use Illuminate\Support\ServiceProvider;
+use App\Policies\ManageNewsletterPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,5 +39,7 @@ class AppServiceProvider extends ServiceProvider
                 }])->orderBy('order')->get()
             );
         });
+
+          \Illuminate\Support\Facades\Gate::define('manage-newsletters', [ManageNewsletterPolicy::class, 'manage']);
     }
 }
