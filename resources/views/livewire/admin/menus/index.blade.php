@@ -8,7 +8,7 @@ use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 use App\Traits\ManageMenus;
 
-new #[Title('Nav Menu'), Layout('components.layouts.admin')] 
+new #[Title('Nav Menu'), Layout('components.layouts.admin')]
 class extends Component {
 	use Toast, ManageMenus;
 
@@ -51,8 +51,8 @@ class extends Component {
     {
         $operator = $direction === 'up' ? '<' : '>';
         $orderDirection = $direction === 'up' ? 'desc' : 'asc';
-        
-        $query = $isSubmenu 
+
+        $query = $isSubmenu
             ? Submenu::where('menu_id', $item->menu_id)
             : Menu::query();
 
@@ -101,15 +101,15 @@ class extends Component {
     private function deleteItem($item, $parent = null): void
     {
         $isSubmenu = $parent !== null;
-        
+
         $item->delete();
-        
+
         if ($isSubmenu) {
             $this->reorderItems($parent->submenus());
         } else {
             $this->reorderItems(Menu::query());
         }
-        
+
         $this->getMenus();
         $this->success(__($isSubmenu ? 'Submenu' : 'Menu') . __(' deleted with success.'));
     }
@@ -132,7 +132,7 @@ class extends Component {
             $item->order = $index + 1;
             $item->save();
         }
-    }	
+    }
 
 	// Enregistrer un nouveau menu.
 	public function saveMenu(): void
@@ -165,7 +165,6 @@ class extends Component {
 	}
 
 }; ?>
-
 <div>
     <x-header title="{{ __('Navigation') }}" separator progress-indicator>
         <x-slot:actions class="lg:hidden">
@@ -180,13 +179,16 @@ class extends Component {
                     {{ $menu->label }}
                 </x-slot:value>
                 <x-slot:sub-value>
-                    @if ($menu->link)
-                        {{ $menu->link }}
-                    @else
-                        @lang('Root menu')
-                    @endif
+                    <div class="break-words overflow-hidden max-w-full">
+                        @if ($menu->link)
+                            {{ $menu->link }}
+                        @else
+                            @lang('Root menu')
+                        @endif
+                    </div>
                 </x-slot:sub-value>
                 <x-slot:actions>
+                    <!-- Les actions restent inchangées -->
                     @if ($menu->order > 1)
                         <x-popover>
                             <x-slot:trigger>
@@ -235,55 +237,60 @@ class extends Component {
                 </x-slot:heading>
                 <x-slot:content>
                     @foreach ($menu->submenus as $submenu)
+                    <div>
                         <x-list-item :item="$menu" no-separator no-hover>
                             <x-slot:value>
                                 {{ $submenu->label }}
                             </x-slot:value>
                             <x-slot:sub-value>
-                                {{ $submenu->link }}
+                                <div class="break-words overflow-hidden max-w-full">
+                                    {{ $submenu->link }}
+                                </div>
                             </x-slot:sub-value>
                             <x-slot:actions>
+                                <!-- Les actions des sous-menus restent inchangées -->
                                 @if ($submenu->order > 1)
-									<x-popover>
-										<x-slot:trigger>
-											<x-button icon="s-chevron-up" wire:click="upSub({{ $submenu->id }})" spinner />
-										</x-slot:trigger>
-										<x-slot:content class="pop-small">
-											@lang('Up')
-										</x-slot:content>
-									</x-popover>
+                                    <x-popover>
+                                        <x-slot:trigger>
+                                            <x-button icon="s-chevron-up" wire:click="upSub({{ $submenu->id }})" spinner />
+                                        </x-slot:trigger>
+                                        <x-slot:content class="pop-small">
+                                            @lang('Up')
+                                        </x-slot:content>
+                                    </x-popover>
                                 @endif
                                 @if ($submenu->order < $menu->submenus->count())
-									<x-popover>
-										<x-slot:trigger>
-											<x-button icon="s-chevron-down" e5d59f7wire:click="downSub({{ $submenu->id }})" spinner />
-										</x-slot:trigger>
-										<x-slot:content class="pop-small">
-											@lang('Down')
-										</x-slot:content>
-									</x-popover>
+                                    <x-popover>
+                                        <x-slot:trigger>
+                                            <x-button icon="s-chevron-down" wire:click="downSub({{ $submenu->id }})" spinner />
+                                        </x-slot:trigger>
+                                        <x-slot:content class="pop-small">
+                                            @lang('Down')
+                                        </x-slot:content>
+                                    </x-popover>
                                 @endif
-								<x-popover>
-									<x-slot:trigger>
-										<x-button icon="c-arrow-path-rounded-square" link="{{ route('submenus.edit', $submenu->id) }}"
-											class="text-blue-500 btn-ghost btn-sm" spinner />
-									</x-slot:trigger>
-									<x-slot:content class="pop-small">
-										@lang('Edit')
-									</x-slot:content>
-								</x-popover>
-								<x-popover>
-									<x-slot:trigger>
-										<x-button icon="o-trash" wire:click="deleteSubmenu({{ $menu->id }}, {{ $submenu->id }})"
-											wire:confirm="{{ __('Are you sure to delete this menu?') }}" spinner
-											class="text-red-500 btn-ghost btn-sm" />
-									</x-slot:trigger>
-									<x-slot:content class="pop-small">
-										@lang('Delete')
-									</x-slot:content>
-								</x-popover>                               
+                                <x-popover>
+                                    <x-slot:trigger>
+                                        <x-button icon="c-arrow-path-rounded-square" link="{{ route('submenus.edit', $submenu->id) }}"
+                                            class="text-blue-500 btn-ghost btn-sm" spinner />
+                                    </x-slot:trigger>
+                                    <x-slot:content class="pop-small">
+                                        @lang('Edit')
+                                    </x-slot:content>
+                                </x-popover>
+                                <x-popover>
+                                    <x-slot:trigger>
+                                        <x-button icon="o-trash" wire:click="deleteSubmenu({{ $menu->id }}, {{ $submenu->id }})"
+                                            wire:confirm="{{ __('Are you sure to delete this menu?') }}" spinner
+                                            class="text-red-500 btn-ghost btn-sm" />
+                                    </x-slot:trigger>
+                                    <x-slot:content class="pop-small">
+                                        @lang('Delete')
+                                    </x-slot:content>
+                                </x-popover>
                             </x-slot:actions>
                         </x-list-item>
+                    </div>
                     @endforeach
 
                     <br>
