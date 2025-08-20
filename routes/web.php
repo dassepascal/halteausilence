@@ -46,6 +46,8 @@ Route::middleware('auth')->group(function () {
             Volt::route('/images/{year}/{month}/{id}/edit', 'admin.images.edit')->name('images.edit');
             Volt::route('/settings', 'admin.settings')->name('settings');
             Volt::route('/contacts', 'admin.contact-list')->name('contact-list');
+            Volt::route('/newsletters', 'admin.newsletters')->name('admin.newsletters')->middleware('can:manage-newsletters');
+            Volt::route('/newsletter/subscription','admin.newsletter.subscription')->name('newsletter.subscription');
         });
     });
 });
