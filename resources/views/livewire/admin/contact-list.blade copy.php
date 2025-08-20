@@ -81,13 +81,17 @@ new #[Title('Contacts'), Layout('components.layouts.admin')] class extends Compo
 }; ?>
 
 <div>
-    <x-header title="{{ __('Liste des contacts') }}" separator progress-indicator>
-        <x-slot:actions class="lg:hidden">
-            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
-                link="{{ route('admin') }}" />
-        </x-slot:actions>
-    </x-header>
-     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 my-4">
+    <div class="flex justify-between items-center mb-6">
+        <x-header title="{{ __('Liste des contacts') }}" separator progress-indicator>
+            <x-slot:actions>
+                <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
+                    link="{{ route('admin') }}" />
+            </x-slot:actions>
+        </x-header>
+        <div>
+
+        </div>
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
             Total: {{ $totalCount }}
         </span>
         @if ($unreadCount > 0)
@@ -95,15 +99,15 @@ new #[Title('Contacts'), Layout('components.layouts.admin')] class extends Compo
             Non lus: {{ $unreadCount }}
         </span>
         @endif
+    </div>
 
-         @if (session()->has('message'))
+    @if (session()->has('message'))
     <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
         {{ session('message') }}
     </div>
     @endif
 
-
-     <!-- Filtres et recherche -->
+    <!-- Filtres et recherche -->
     <div class="bg-white rounded-lg shadow p-6 mb-6">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
             <div class="flex space-x-4">

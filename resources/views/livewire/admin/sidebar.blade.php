@@ -50,7 +50,7 @@ new class extends Component {
         <x-menu-item icon="c-photo" title="{{ __('Images') }}" link="{{ route('images.index') }}" />
           <x-menu-item icon="m-newspaper" title="{{ __('NewslettersManager') }}"
                 link="{{ route('admin.newsletters') }}" :class="App::isDownForMaintenance() ? 'bg-red-300' : ''" />
-        <x-menu-item icon="" title="{{ __('Contacts') }}" link="{{ route('contact-list') }}" :class="App::isDownForMaintenance() ? 'bg-red-300' : ''" />
+        <x-menu-item icon="o-chat-bubble-left" title="{{ __('Contacts') }}" link="{{ route('contact-list') }}" :class="App::isDownForMaintenance() ? 'bg-red-300' : ''" />
             <x-menu-item icon="m-cog-8-tooth" title="{{ __('Settings') }}" link="{{ route('settings') }}" :class="App::isDownForMaintenance() ? 'bg-red-300' : ''" />
         @endif
         <x-menu-item icon="m-arrow-right-end-on-rectangle" title="{{ __('Go on site') }}" link="/" />
