@@ -6,6 +6,8 @@ use App\Models\Newsletter;
 use App\Models\NewsletterCategory;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\{Layout, Title};
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +20,8 @@ use Illuminate\Support\Facades\Auth;
 | dans un seul fichier extrêmement lisible.
 */
 
-new class extends Component
+new #[Title('NewslettersManager')] #[Layout('components.layouts.admin'  )]
+  class extends Component
 {
     use WithPagination;
 
@@ -192,14 +195,19 @@ new class extends Component
 {{-- ---------------------------------------------------------------------------
 | Template Blade/HTML
 --------------------------------------------------------------------------- --}}
-<div class="p-6">
+<div>
     {{-- Header --}}
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Gestion des Newsletters</h1>
-        <button wire:click="openModal" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+
+       <x-header title="{{ __('Gestion des newsletters') }}" separator progress-indicator>
+        <x-slot:actions class="lg:hidden">
+            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline"
+                link="{{ route('admin') }}" />
+        </x-slot:actions>
+    </x-header>
+        <button wire:click="openModal" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg my-4">
             Nouvelle Newsletter
         </button>
-    </div>
+
 
     {{-- Statistiques --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

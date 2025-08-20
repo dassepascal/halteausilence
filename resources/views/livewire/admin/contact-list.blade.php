@@ -3,10 +3,14 @@
 
 use App\Models\Contact;
 use Livewire\Attributes\On;
+
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
+use Mary\Traits\Toast;
+use Livewire\Attributes\{Layout, Title};
 
-new class extends Component
+
+new #[Title('Contacts'), Layout('components.layouts.admin')]  class extends Component
 {
     use WithPagination;
 
@@ -80,8 +84,13 @@ new class extends Component
 
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Messages de Contact</h1>
-        <div class="flex space-x-2">
+         <x-header title="{{ __('Liste des contacts') }}" separator progress-indicator>
+        <x-slot:actions>
+            <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
+                link="{{ route('admin') }}" />
+        </x-slot:actions>
+    </x-header>
+        <!-- <div class="flex space-x-2">
             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                 Total: {{ $totalCount }}
             </span>
@@ -90,9 +99,8 @@ new class extends Component
                     Non lus: {{ $unreadCount }}
                 </span>
             @endif
-        </div>
-    </div>
-
+        </div> -->
+    
     @if(session()->has('message'))
         <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
             {{ session('message') }}
