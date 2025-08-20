@@ -16,7 +16,7 @@ new class extends Component {
 }; ?>
 
 <div>
-    <x-menu activate-by-route>
+    <x-menu activate-by-route class="bg-red-500">
         <x-menu-separator />
         <x-list-item :item="Auth::user()" value="name" sub-value="email" no-separator no-hover class="-mx-2 !-my-2 rounded">
             <x-slot:actions>

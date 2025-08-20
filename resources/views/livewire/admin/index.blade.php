@@ -42,8 +42,8 @@ new #[Title('Dashboard')] #[Layout('components.layouts.admin')] class extends Co
 }; ?>
 
 <div>
-    
-    <x-collapse wire:model="openGlance" class="shadow-md">
+
+    <x-collapse wire:model="openGlance" class="shadow-md bg-red-500">
         <x-slot:heading>
             @lang('In a glance')
         </x-slot:heading>
