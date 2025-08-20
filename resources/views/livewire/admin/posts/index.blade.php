@@ -31,7 +31,7 @@ new #[Title('List Posts'), Layout('components.layouts.admin')] class extends Com
 
 		return Category::whereHas('posts', fn (Builder $q) => $q->where('user_id', Auth::id()))->get();
 	}
-    
+
 	public function headers(): array
 	{
 		$headers = [['key' => 'title', 'label' => __('Title')]];
@@ -57,11 +57,11 @@ new #[Title('List Posts'), Layout('components.layouts.admin')] class extends Com
 			->latest()
             ->paginate(6);
 	}
-    
+
 
     public function deletePost(int $postId): void
 	{
-		$post = Post::findOrFail($postId);		
+		$post = Post::findOrFail($postId);
 		$post->delete();
 		$this->success("{$post->title} " . __('deleted'));
 	}
@@ -91,7 +91,7 @@ new #[Title('List Posts'), Layout('components.layouts.admin')] class extends Com
     <x-header title="{{ __('Posts') }}" separator progress-indicator>
         <x-slot:actions>
             <x-input placeholder="{{ __('Search...') }}" wire:model.live.debounce="search" clearable icon="o-magnifying-glass" />
-            <x-button label="{{ __('Add a post') }}" class="btn-outline lg:hidden" link="#" />
+            <x-button label="{{ __('Add a post') }}" class="btn-outline lg:hidden" link="{{ route('posts.create') }}" />
             <x-button icon="s-building-office-2" label="{{ __('Dashboard') }}" class="btn-outline lg:hidden"
                 link="{{ route('admin') }}" />
         </x-slot:actions>
@@ -143,7 +143,7 @@ new #[Title('List Posts'), Layout('components.layouts.admin')] class extends Com
 
                 @scope('actions', $post)
                     <div class="flex">
-                         
+
                         <x-popover>
                             <x-slot:trigger>
                                 <x-button icon="o-finger-print" wire:click="clonePost({{ $post->id }})" spinner
