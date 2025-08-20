@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    
+
        /**
      * Seed the application's database.
      */
@@ -26,12 +26,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             CategorySeeder::class,
-            PostSeeder::class,  
+            PostSeeder::class,
             PageSeeder::class,
             FooterSeeder::class,
             MenusSeeder::class ,
-            CommentSeeder ::class,   
-            SettingSeeder ::class    
+            CommentSeeder ::class,
+            SettingSeeder ::class,
+            ContactSeeder ::class
         ]);
     }
     }
