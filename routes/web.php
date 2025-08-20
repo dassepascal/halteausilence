@@ -2,8 +2,12 @@
 
 use Livewire\Volt\Volt;
 use App\Http\Middleware\IsAdmin;
+use App\Services\NewsletterService;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\IsAdminOrRedac;
+use App\Models\Newsletter;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 Volt::route('/', 'index');
 Volt::route('/category/{slug}', 'index');
@@ -12,6 +16,58 @@ Volt::route('/search/{param}', 'index')->name('posts.search');
 Volt::route('/pages/{page:slug}', 'pages.show')->name('pages.show');
 Volt::route('/contact', 'contact-form')->name('contact');
 Volt::route('/calendar', 'calendar')->name('calendar');
+
+// Routes minimales pour les fonctionnalités newsletter dans les emails
+Route::get('/newsletter/{newsletter}/track/open/{user}', function (Request $request, Newsletter $newsletter, User $user) {
+    $token = $request->get('token');
+    $service = app(NewsletterService::class);
+
+    if ($service->validateTrackingToken($newsletter, $user, $token)) {
+        $service->trackOpen($newsletter, $user);
+    }
+
+    // Retourner un pixel transparent
+    return response()->make(
+        base64_decode('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'),
+        200,
+        ['Content-Type' => 'image/gif']
+    );
+})->name('newsletter.track.open');
+
+Route::get('/newsletter/{newsletter}/track/click/{user}', function (Request $request, Newsletter $newsletter, User $user) {
+    $token = $request->get('token');
+    $url = $request->get('url');
+    $service = app(NewsletterService::class);
+
+    if ($service->validateTrackingToken($newsletter, $user, $token)) {
+        $service->trackClick($newsletter, $user);
+    }
+
+    return redirect($url);
+})->name('newsletter.track.click');
+
+Route::get('/newsletter/unsubscribe/{user}', function (Request $request, User $user) {
+    $token = $request->get('token');
+    $service = app(NewsletterService::class);
+
+    if ($service->unsubscribeUser($user, $token)) {
+        return view('newsletter.unsubscribed', compact('user'));
+    }
+
+    abort(403, 'Lien de désinscription invalide');
+})->name('newsletter.unsubscribe');
+
+Route::get('/newsletter/{newsletter}/view/{user}', function (Request $request, Newsletter $newsletter, User $user) {
+    $token = $request->get('token');
+    $service = app(NewsletterService::class);
+
+    if (!$service->validateTrackingToken($newsletter, $user, $token)) {
+        abort(403);
+    }
+
+    $service->trackOpen($newsletter, $user);
+    return view('newsletter.view', compact('newsletter', 'user'));
+})->name('newsletter.view');
 
 Route::middleware('guest')->group(function () {
     Volt::route('/login', 'auth.login')->name('login');

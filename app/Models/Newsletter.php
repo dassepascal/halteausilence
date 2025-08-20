@@ -92,4 +92,5 @@ class Newsletter extends Model
 
         return $totalSent > 0 ? ($totalClicked / $totalSent) * 100 : 0;
     }
+    
 }
