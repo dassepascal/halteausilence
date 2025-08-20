@@ -3,7 +3,7 @@
 use Livewire\Attributes\{Layout, Validate, Title};
 use Livewire\Volt\Component;
 
-new #[Title('Login')] #[Layout('components.layouts.auth')] 
+new #[Title('Login')] #[Layout('components.layouts.auth')]
 class extends Component {
 
     #[Validate('required|email')]
@@ -12,24 +12,23 @@ class extends Component {
     #[Validate('required')]
     public string $password = '';
 
-    public function login()
-    {
-        $credentials = $this->validate();
+  public function login()
+{
+    $credentials = $this->validate();
 
-		if (auth()->attempt($credentials)) {
-			// Régénération de la session
-			request()->session()->regenerate();
+    if (auth()->attempt($credentials)) {
+        request()->session()->regenerate();
 
-			if (auth()->user()->isAdmin()) {
-				return redirect()->intended('/admin/dashboard');
-			}
+        $user = auth()->user();
+        if ($user->isAdmin() || $user->isRedac()) {
+            return redirect()->intended('/admin/dashboard');
+        }
 
-			// Redirection vers la page d'origine ou la page d'accueil
-			return redirect()->intended('/');
-		}
-
-        $this->addError('email', __('The provided credentials do not match our records.'));
+        return redirect()->intended('/');
     }
+
+    $this->addError('email', __('The provided credentials do not match our records.'));
+}
 }; ?>
 
 <div>

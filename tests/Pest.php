@@ -12,8 +12,17 @@
 */
 
 pest()->extend(Tests\TestCase::class)
- // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('Feature');
+
+// Configuration pour les tests Unit (sans RefreshDatabase par défaut)
+pest()->extend(Tests\TestCase::class)
+    ->in('Unit');
+
+// Configuration spécifique pour les tests d'intégration avec base de données
+pest()->extend(Tests\TestCase::class)
+    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->in('Integration');
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +50,6 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
-{
+function something() {
     // ..
 }

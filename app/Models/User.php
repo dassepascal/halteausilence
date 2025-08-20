@@ -66,20 +66,22 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Post::class, 'favorites');
     }
-    public function isAdmin(): bool
-    {
-        return 'admin' === $this->role;
-    }
+  // Dans votre fichier app/Models/User.php
 
-    public function isRedac(): bool
-    {
-        return 'redac' === $this->role;
-    }
+public function isAdmin(): bool
+{
+    return $this->role === 'admin';
+}
 
-    public function isAdminOrRedac(): bool
-    {
-        return 'admin' === $this->role || 'redac' === $this->role;
-    }
+public function isRedac(): bool
+{
+    return $this->role === 'redac';
+}
+
+public function isAdminOrRedac(): bool
+{
+    return in_array($this->role, ['admin', 'redac']);
+}
        public function newsletters(): BelongsToMany
       {
           return $this->belongsToMany(Newsletter::class, 'newsletter_subscribers')
