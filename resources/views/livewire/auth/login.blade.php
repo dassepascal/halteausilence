@@ -3,7 +3,7 @@
 use Livewire\Attributes\{Layout, Validate, Title};
 use Livewire\Volt\Component;
 
-new #[Title('Login')] #[Layout('components.layouts.auth')]
+new #[Title('Login')] #[Layout('components.layouts.app')]
 class extends Component {
 
     #[Validate('required|email')]
@@ -31,9 +31,9 @@ class extends Component {
 }
 }; ?>
 
-<div>
-    <x-card class="flex items-center justify-center h-screen" title="{{ __('Login') }}" shadow separator
-        progress-indicator>
+<div >
+    <x-card class="flex items-center justify-center" title="{{ __('Login') }}" shadow separator
+        progress-indicator >
         <x-form wire:submit="login">
             <x-input label="{{ __('E-mail') }}" wire:model="email" icon="o-envelope" type="email" inline required />
             <x-input label="{{ __('Password') }}" wire:model="password" type="password" icon="o-key" type="password"
