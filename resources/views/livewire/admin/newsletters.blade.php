@@ -59,27 +59,25 @@ new #[Title('NewslettersManager')] #[Layout('components.layouts.admin'  )]
     /**
      * Données envoyées au template.
      */
-    public function with(): array
-    {
-        $newsletters = Newsletter::query()
-            ->when($this->search, fn($q) => $q->where('title', 'like', "%{$this->search}%")
-                                             ->orWhere('subject', 'like', "%{$this->search}%"))
-            ->when($this->statusFilter !== 'all', fn($q) => $q->where('status', $this->statusFilter))
-            ->with(['creator','categories'])
-            ->orderByDesc('created_at')
-            ->paginate(10);
+   public function with(): array
+{
+    $newsletters = Newsletter::query()
+        ->when($this->search, fn($q) => $q->where('title', 'like', "%{$this->search}%")
+                                         ->orWhere('subject', 'like', "%{$this->search}%"))
+        ->when($this->statusFilter !== 'all', fn($q) => $q->where('status', $this->statusFilter))
+        ->with(['creator', 'categories'])
+        ->orderByDesc('created_at')
+        ->paginate(10);
 
-        $categories = NewsletterCategory::active()->get();
+    $categories = NewsletterCategory::active()->get();
 
-        // Correction ici : compter les utilisateurs abonnés et valides
-        $subscribersCount = User::query()
-            ->where('newsletter', true)
-            ->where('valid', true)
-            ->count();
+    $subscribersCount = User::query()
+        ->where('newsletter', 1) // Utiliser 1 explicitement
+        ->where('valid', 1)      // Utiliser 1 explicitement
+        ->count();
 
-        return compact('newsletters','categories','subscribersCount');
-    }
-
+    return compact('newsletters', 'categories', 'subscribersCount');
+}
     /* ---------------------------------------------------------------------
     | Actions CRUD & Business
     |---------------------------------------------------------------------*/

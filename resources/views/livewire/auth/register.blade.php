@@ -3,7 +3,7 @@
 use App\Models\User;
 use App\Traits\ManageProfile;
 use Illuminate\Support\Facades\Hash;
-use Livewire\Attributes\{Title, Layout};
+use Livewire\Attributes\{Title, Layout, Validate};
 use Livewire\Volt\Component;
 use App\Notifications\NewUser;
 use App\Rules\StrongPassword;
@@ -16,32 +16,34 @@ class extends Component {
 
 	public ?string $gender = null;
 
-	public function register()
-	{
-		if ($this->gender) {
-			abort(403);
-		}
+public function register()
+{
+    if ($this->gender) {
+        abort(403);
+    }
 
-		$data = $this->validate([
-			'firstname'  => 'required|string|max:255',
-			'name'       => 'required|string|max:255',
-			'newsletter' => 'nullable',
-			'email'      => 'required|email|unique:users',
-			'password'   => ['required','string','min:8','confirmed', new StrongPassword,],
-			'password_confirmation' => 'required',
-		]);
+    $data = $this->validate([
+        'firstname'  => 'required|string|max:255',
+        'name'       => 'required|string|max:255',
+        'newsletter' => 'boolean',
+        'email'      => 'required|email|unique:users',
+        'password'   => ['required', 'string', 'min:8', 'confirmed', new StrongPassword],
+        'password_confirmation' => 'required',
+    ]);
 
-		$data['password'] = Hash::make($data['password']);
-		$user = User::create($data);
-		auth()->login($user);
-		request()->session()->regenerate();
+    $data['password'] = Hash::make($data['password']);
+    // Définir valid à true pour les nouveaux utilisateurs
+    $data['valid'] = true; // Ajoutez ceci
+    $user = User::create($data);
+    auth()->login($user);
+    request()->session()->regenerate();
 
-		Mail::to(auth()->user())->send(new UserRegistered());
+    Mail::to(auth()->user())->send(new UserRegistered($user));
 
-		session()->flash('registered', __('Your account has been successfully created. An email has been sent to you with all the details.'));
+    session()->flash('registered', __('Your account has been successfully created. An email has been sent to you with all the details.'));
 
-		return redirect('/');
-	}
+    return redirect('/');
+}
 
 }; ?>
 

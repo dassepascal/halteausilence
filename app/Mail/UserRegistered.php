@@ -2,46 +2,71 @@
 
 namespace App\Mail;
 
-use App\Models\Post;
-
+use App\Models\User; // IMPORTANT : Utiliser le modèle User
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\SerializesModels;
 
-class UserRegistered extends Mailable
+// Pour de meilleures performances, il est recommandé de mettre les e-mails en file d'attente
+// Implémentez ShouldQueue si votre système de file d'attente est configuré
+class UserRegistered extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    /**
+     * L'instance de l'utilisateur.
+     * Le rendre public permet à Laravel de le rendre automatiquement disponible dans la vue Blade.
+     */
+    public User $user;
 
-    Public Post $post;
-
-    public function __construct()
+    /**
+     * Crée une nouvelle instance du message.
+     * On injecte l'utilisateur qui vient de s'inscrire.
+     */
+    public function __construct(User $user)
     {
-        $this->post = Post::firstOrFail();
+        $this->user = $user;
     }
 
+    /**
+     * Récupère l'enveloppe du message.
+     */
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address($this->post->email, $this->post->name),
-            subject: trans('You have been registered'),
+            // BONNE PRATIQUE : L'expéditeur doit être une adresse fixe de votre application,
+            // configurée dans votre .env (MAIL_FROM_ADDRESS)
+            from: new Address(config('mail.from.address'), config('mail.from.name')),
+
+            // On ajoute le destinataire, qui était manquant dans votre code original
+            to: [
+                new Address($this->user->email, $this->user->name),
+            ],
+
+            subject: 'Bienvenue sur notre site !', // Utilisez une chaîne de caractères claire ou une clé de traduction
         );
     }
 
+    /**
+     * Récupère la définition du contenu du message.
+     */
     public function content(): Content
     {
         return new Content(
-            view: 'mails.registered',
+            view: 'mails.registered', // Assurez-vous que cette vue existe
         );
+        
     }
 
+    /**
+     * Récupère les pièces jointes du message.
+     */
     public function attachments(): array
     {
         return [];
     }
 }
-
