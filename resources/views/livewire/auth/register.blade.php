@@ -3,14 +3,14 @@
 use App\Models\User;
 use App\Traits\ManageProfile;
 use Illuminate\Support\Facades\Hash;
-use Livewire\Attributes\Title;
+use Livewire\Attributes\{Title, Layout};
 use Livewire\Volt\Component;
 use App\Notifications\NewUser;
 use App\Rules\StrongPassword;
 use App\Mail\UserRegistered;
 use Illuminate\Support\Facades\Mail;
 
-new #[Title('Register')]
+new #[Title('Register')] #[Layout('components.layouts.app')]
 class extends Component {
 	use ManageProfile;
 

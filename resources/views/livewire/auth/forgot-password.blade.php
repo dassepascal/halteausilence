@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Password;
 use Livewire\Attributes\{ Layout, Title };
 use Livewire\Volt\Component;
 
-new #[Title('Password renewal')] #[Layout('components.layouts.auth')]
+new #[Title('Password renewal')] #[Layout('components.layouts.app')]
 class extends Component {
 
 	public string $email = '';

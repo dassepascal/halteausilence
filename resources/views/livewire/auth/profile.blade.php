@@ -8,7 +8,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
-new #[Title('Profile')] #[Layout('components.layouts.auth')] class extends Component {
+new #[Title('Profile')] #[Layout('components.layouts.app')] class extends Component {
     use Toast;
 
     public User $user;

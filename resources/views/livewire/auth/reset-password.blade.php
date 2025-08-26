@@ -8,7 +8,7 @@ use Livewire\Attributes\{Layout, Locked};
 use Livewire\Volt\Component;
 
 new
-#[Layout('components.layouts.auth')]
+#[Layout('components.layouts.app')]
 class extends Component {
 	#[Locked]
 	public string $token = '';
