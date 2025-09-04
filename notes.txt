@@ -62,3 +62,10 @@ Route::get('/newsletter/{newsletter}/view/{user}', function (Request $request, N
     $service->trackOpen($newsletter, $user);
     return view('newsletter.view', compact('newsletter', 'user'));
 })->name('newsletter.view');
+
+
+Pest
+modification du fichier phpunit.xml
+decommenter les 2 lignes suivantes:
+    <env name="DB_CONNECTION" value="sqlite"/>
+    <env name="DB_DATABASE" value=":memory:"/>

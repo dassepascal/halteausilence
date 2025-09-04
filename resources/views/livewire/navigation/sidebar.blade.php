@@ -49,5 +49,6 @@ new class() extends Component {
             <x-menu-item title="{{ $menu->label }}" link="{{ $menu->link }}" />
         @endif
     @endforeach
+      <x-menu-item title="{{ __('Contact') }}" link="/contact" />
     </x-menu>
 </div>

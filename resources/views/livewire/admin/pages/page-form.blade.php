@@ -1,6 +1,6 @@
 <x-card>
     <x-form wire:submit="save">
-        <x-input type="text" wire:model="title" label="{{ __('Title') }}"
+       <x-input label="{{ __('Title') }}" wire:model="label" />
             placeholder="{{ __('Enter the title') }}" wire:change="$refresh" />
         <x-input type="text" wire:model="slug" label="{{ __('Slug') }}" /><br>
         <x-checkbox label="{{ __('Published') }}" wire:model="active" /><br>
