@@ -9,9 +9,6 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $users = [
@@ -24,6 +21,7 @@ class UserSeeder extends Seeder
                 'valid'      => true,
                 'created_at' => Carbon::now()->subYears(3),
                 'updated_at' => Carbon::now()->subYears(3),
+                'password'   => bcrypt('password'), // Ajoutez un mot de passe
             ],
             [
                 'firstname'  => 'Rédacteur',
@@ -34,6 +32,7 @@ class UserSeeder extends Seeder
                 'valid'      => true,
                 'created_at' => Carbon::now()->subYears(3),
                 'updated_at' => Carbon::now()->subYears(3),
+                'password'   => bcrypt('password'),
             ],
             [
                 'firstname'  => 'Utilisateur',
@@ -44,12 +43,15 @@ class UserSeeder extends Seeder
                 'valid'      => true,
                 'created_at' => Carbon::now()->subYears(2),
                 'updated_at' => Carbon::now()->subYears(2),
+                'password'   => bcrypt('password'),
             ],
         ];
 
         foreach ($users as $userData) {
-            User::factory()->create($userData);
+            User::firstOrCreate(
+                ['email' => $userData['email']], // Vérifie l'unicité sur l'email
+                $userData
+            );
         }
     }
 }
-

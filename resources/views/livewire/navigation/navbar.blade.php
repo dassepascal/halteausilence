@@ -28,9 +28,13 @@ new class extends Component {
         <label for="main-drawer" class="mr-3 lg:hidden">
             <x-icon name="o-bars-3" class="cursor-pointer" />
         </label>
+        <img src="{{ asset('storage/photos/logo_halteausilence.png
+                             ') }}" alt="logo" class="h-auto w-20 sm:w-22 md:w-20 lg:w-24 xl:w-16
+                        ">
     </x-slot:brand>
 
     <x-slot:actions>
+
         <span class="hidden lg:block">
             @if ($user = auth()->user())
             <x-dropdown>
@@ -73,6 +77,7 @@ new class extends Component {
         @endauth
 
         <x-theme-toggle title="{{ __('Toggle theme') }}" class="w-4 h-8" />
-        <livewire:search />
+
+   
     </x-slot:actions>
 </x-nav>

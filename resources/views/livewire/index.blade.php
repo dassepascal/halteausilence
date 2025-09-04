@@ -52,7 +52,10 @@ new class extends Component {
 }; ?>
 
 <div class="relative grid items-center w-full py-5 mx-auto md:px-12 max-w-7xl">
+    <div class="mb-4">
+        <livewire:search />
 
+    </div>
     @if ($category)
     <x-header title="{{ __('Posts for category ') }} {{ $category->title }}"
         size="text-2xl sm:text-3xl md:text-4xl" />
@@ -79,14 +82,14 @@ new class extends Component {
 
                 <div class="text-justify  ">
                     {!!
-                        \Illuminate\Support\Str::words(
-                            strip_tags(
-                                $post->excerpt
-                                    ?? $post->body
-                                    ?? ''
-                            ),
-                            config('app.excerptSize')
-                        )
+                    \Illuminate\Support\Str::words(
+                    strip_tags(
+                    $post->excerpt
+                    ?? $post->body
+                    ?? ''
+                    ),
+                    config('app.excerptSize')
+                    )
                     !!}
                 </div>
                 <br>

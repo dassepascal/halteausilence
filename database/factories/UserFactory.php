@@ -2,15 +2,19 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
 class UserFactory extends Factory
 {
+
+     protected $model = User::class;
     /**
      * The current password being used by the factory.
      */
@@ -24,14 +28,15 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->lastName(),  // Ajout des parenthèses
-            'firstname' => fake()->firstName(),  // Ajout des parenthèses
-            'email' => fake()->unique()->safeEmail(),  // Ajout des parenthèses
-            'password' => static::$password ??= Hash::make('password'),
-            'newsletter' => fake()->boolean(),
-            'valid' => fake()->boolean(),
-            'role' => 'user',  // Ajout du champ role manquant
-            'created_at' => fake()->dateTimeBetween('-4 years', '-6 months'),
+            'name'       => $this->faker->lastName(),
+            'firstname'  => $this->faker->firstName(),
+            'email'      => $this->faker->unique()->safeEmail(),
+            'password'   => bcrypt('password'),
+            'newsletter' => $this->faker->boolean(),
+            'valid'      => true,
+            'role'       => 'user',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
             'remember_token' => Str::random(10),
         ];
     }

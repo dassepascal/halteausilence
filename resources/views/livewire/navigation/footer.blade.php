@@ -22,14 +22,15 @@ new class() extends Component {
             </a>
         @endforeach
     </nav>
-    <nav>
+    <!-- git hub + reseau social -->
+    <!-- <nav>
         <div class="grid grid-flow-col gap-4">
             <a href=" "" title="Github"
             target="_blank">
-                <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    width="24" 
-                    height="24" 
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
                     viewBox="0 0 24 24"
                     class="fill-current">
                     <path
@@ -39,10 +40,10 @@ new class() extends Component {
             <a href=" ""
                 title="Discord"
                 target="_blank">
-                <svg 
-                    width="25" 
-                    height="28" 
-                    viewBox="0 0 71 80" 
+                <svg
+                    width="25"
+                    height="28"
+                    viewBox="0 0 71 80"
                     class="fill-current mt-[-.05rem]"
                     xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -50,8 +51,8 @@ new class() extends Component {
                 </svg>
             </a>
         </div>
-    </nav>
+    </nav> -->
     <aside>
-        <p>Version 0.1.0</a> © {{ date('Y') }} Moi</p>
+        <p>Version 0.1.0</a> © {{ date('Y') }} Digital Partenaire</p>
     </aside>
 </footer>

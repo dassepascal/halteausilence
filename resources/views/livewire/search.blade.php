@@ -5,20 +5,20 @@ use Livewire\Volt\Component;
 
 new class() extends Component {
 
-	#[Validate('required|string|max:100')]
-	public string $search = '';
+    #[Validate('required|string|max:100')]
+    public string $search = '';
 
-	public function save()
-	{
-		$data = $this->validate();
+    public function save()
+    {
+        $data = $this->validate();
 
-		return redirect('/search/' . $data['search']);
-	}
+        return redirect('/search/' . $data['search']);
+    }
 };
 ?>
 
 <div>
-    <form wire:submit.prevent="save">
-        <x-input placeholder="{{ __('Search') }}..." wire:model="search" clearable icon="o-magnifying-glass" />
+    <form wire:submit.prevent="save" class="p-4">
+         <x-input placeholder="{{ __('Search') }}..." wire:model="search" clearable icon="o-magnifying-glass" />
     </form>
 </div>

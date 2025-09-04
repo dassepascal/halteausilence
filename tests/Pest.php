@@ -1,5 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
+
+
+use Illuminate\Support\Facades\DB;
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -13,16 +20,16 @@
 
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
-    ->in('Feature');
+    ->beforeEach(function () {
+        config(['database.default' => 'sqlite']);
+        config(['database.connections.sqlite.database' => ':memory:']);
+        Artisan::call('migrate', ['--env' => 'testing']);
+        $this->seed(\Database\Seeders\TestDatabaseSeeder::class);
+    })
+    ->in('Feature', 'Integration');
 
-// Configuration pour les tests Unit (sans RefreshDatabase par défaut)
 pest()->extend(Tests\TestCase::class)
     ->in('Unit');
-
-// Configuration spécifique pour les tests d'intégration avec base de données
-pest()->extend(Tests\TestCase::class)
-    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
-    ->in('Integration');
 
 /*
 |--------------------------------------------------------------------------
