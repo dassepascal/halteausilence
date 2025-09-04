@@ -50,7 +50,7 @@ new class extends Component {
             @else
             <x-button label="{{ __('Login') }}" link="/login" class="btn-ghost" />
             @endif
-            <x-button label="{{ __('About') }}" link="/about" class="" />
+            <x-button label="{{ __('About') }}" link="/about" class="btn-ghost" />
             @foreach ($menus as $menu)
             @if ($menu->submenus->isNotEmpty())
             <x-dropdown>
@@ -67,7 +67,7 @@ new class extends Component {
                 class="btn-ghost" />
             @endif
             @endforeach
-
+ <x-button label="{{ __('Contact') }}" link="/contact" class="btn-ghost" />
         </span>
         @auth
         @if ($user->favoritePosts()->exists())
@@ -76,8 +76,10 @@ new class extends Component {
         @endif
         @endauth
 
+
+
         <x-theme-toggle title="{{ __('Toggle theme') }}" class="w-4 h-8" />
 
-   
+
     </x-slot:actions>
 </x-nav>
