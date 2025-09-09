@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'n8n' => [
+        'key' => env('N8N_API_KEY'),
+    ],
+
 ];
