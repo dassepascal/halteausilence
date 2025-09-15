@@ -6,7 +6,7 @@ use Livewire\Attributes\{Layout, Validate, Title};
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 
-new #[Title('Create Page'), Layout('components.layouts.admin')] 
+new #[Title('Create Page'), Layout('components.layouts.admin')]
 class extends Component {
 	use Toast;
 
@@ -28,7 +28,7 @@ class extends Component {
 	#[Validate('required|max:160')]
 	public string $meta_description = '';
 
-	#[Validate('required|regex:/^[A-Za-z0-9-éèàù]{1,50}?(,[A-Za-z0-9-éèàù]{1,50})*$/')]
+	#[Validate('nullable|regex:/^[A-Za-z0-9-éèàù]{1,50}?(,[A-Za-z0-9-éèàù]{1,50})*$/')]
 	public string $meta_keywords = '';
 
 	public function updatedTitle($value): void
