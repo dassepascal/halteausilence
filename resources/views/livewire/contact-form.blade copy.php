@@ -4,8 +4,6 @@
 use App\Mail\ContactMessage;
 use App\Models\Contact;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
@@ -29,48 +27,27 @@ new class extends Component
     {
         $this->validate();
 
-        // Sauvegarde en BDD
         $contact = Contact::create([
-            'name'    => $this->name,
-            'email'   => $this->email,
+            'name' => $this->name,
+            'email' => $this->email,
             'subject' => $this->subject,
             'message' => $this->message,
         ]);
 
-        // Envoi e-mail
+        // Envoyer l'email
         try {
             Mail::to(config('mail.contact_email', 'admin@example.com'))
                 ->send(new ContactMessage($contact));
         } catch (\Exception $e) {
-            Log::error('Erreur envoi email contact: ' . $e->getMessage());
+            // Log l'erreur mais ne pas faire échouer le processus
+            logger()->error('Erreur envoi email contact: ' . $e->getMessage());
         }
 
-        // Webhook n8n
-        $webhookUrl = env('N8N_CONTACT_WEBHOOK_URL');
-        Log::info("Tentative webhook N8N: {$webhookUrl}");
-
-        if (!empty($webhookUrl)) {
-            try {
-                $response = Http::post($webhookUrl, [
-                    'name'    => $this->name,
-                    'email'   => $this->email,
-                    'subject' => $this->subject,
-                    'message' => $this->message,
-                ]);
-
-                Log::info("Réponse webhook: statut {$response->status()}, succès: " . ($response->successful() ? 'Oui' : 'Non'));
-            } catch (\Exception $e) {
-                Log::error("Erreur webhook N8N: " . $e->getMessage());
-            }
-        } else {
-            Log::error('URL webhook manquante dans .env (N8N_CONTACT_WEBHOOK_URL)');
-        }
-
-        // Reset formulaire
+        // Reset du formulaire
         $this->reset(['name', 'email', 'subject', 'message']);
         $this->showSuccess = true;
 
-        // Masquer auto le succès après 5s
+        // Masquer le message de succès après 5 secondes
         $this->dispatch('contact-sent');
     }
 
@@ -78,32 +55,26 @@ new class extends Component
     {
         $this->showSuccess = false;
     }
-};
-?>
-
+}; ?>
 
 <div class="max-w-2xl mx-auto p-6">
     <div class="bg-white rounded-lg shadow-md p-8">
         <h2 class="text-2xl font-bold text-gray-900 mb-6">Nous contacter</h2>
 
         @if($showSuccess)
-        <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
-            <div class="flex justify-between items-center">
-                <span>✅ Votre message a été envoyé avec succès ! Nous vous répondrons rapidement.</span>
-                <button wire:click="hideSuccess" class="text-green-700 hover:text-green-900">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
+            <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
+                <div class="flex justify-between items-center">
+                    <span>✅ Votre message a été envoyé avec succès ! Nous vous répondrons rapidement.</span>
+                    <button wire:click="hideSuccess" class="text-green-700 hover:text-green-900">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
-        </div>
         @endif
 
-
-
-
-
-        <form wire:submit.prevent="submit" id="contactForm" class="space-y-6">
+        <form wire:submit="submit" class="space-y-6">
             <!-- Nom -->
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
@@ -114,10 +85,10 @@ new class extends Component
                     id="name"
                     wire:model="name"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('name') border-red-500 @enderror"
-                    placeholder="Votre nom complet">
-                <p id="nameError" class="mt-1 text-sm text-red-600 hidden"></p>
+                    placeholder="Votre nom complet"
+                >
                 @error('name')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -131,10 +102,10 @@ new class extends Component
                     id="email"
                     wire:model="email"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('email') border-red-500 @enderror"
-                    placeholder="votre@email.com">
-                <p id="emailError" class="mt-1 text-sm text-red-600 hidden"></p>
+                    placeholder="votre@email.com"
+                >
                 @error('email')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -148,10 +119,10 @@ new class extends Component
                     id="subject"
                     wire:model="subject"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('subject') border-red-500 @enderror"
-                    placeholder="Sujet de votre message">
-                <p id="subjectError" class="mt-1 text-sm text-red-600 hidden"></p>
+                    placeholder="Sujet de votre message"
+                >
                 @error('subject')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -165,10 +136,10 @@ new class extends Component
                     wire:model="message"
                     rows="5"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('message') border-red-500 @enderror"
-                    placeholder="Votre message (minimum 10 caractères)"></textarea>
-                <p id="messageError" class="mt-1 text-sm text-red-600 hidden"></p>
+                    placeholder="Votre message (minimum 10 caractères)"
+                ></textarea>
                 @error('message')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -177,7 +148,8 @@ new class extends Component
                 <button
                     type="submit"
                     wire:loading.attr="disabled"
-                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200">
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200"
+                >
                     <span wire:loading.remove>Envoyer le message</span>
                     <span wire:loading class="flex items-center justify-center">
                         <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -193,54 +165,6 @@ new class extends Component
 </div>
 
 <script>
-    document.getElementById("contactForm").addEventListener("submit", function(e) {
-        let valid = true;
-
-        // Reset erreurs
-        ["nameError", "emailError", "subjectError", "messageError"].forEach(id => {
-            document.getElementById(id).classList.add("hidden");
-        });
-
-        // Vérif nom
-        const name = document.getElementById("name").value.trim();
-        if (name.length < 2) {
-            document.getElementById("nameError").innerText = "Le nom doit contenir au moins 2 caractères.";
-            document.getElementById("nameError").classList.remove("hidden");
-            valid = false;
-        }
-
-        // Vérif email
-        const email = document.getElementById("email").value.trim();
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            document.getElementById("emailError").innerText = "Veuillez entrer une adresse email valide.";
-            document.getElementById("emailError").classList.remove("hidden");
-            valid = false;
-        }
-
-        // Vérif sujet
-        const subject = document.getElementById("subject").value.trim();
-        if (subject.length < 3) {
-            document.getElementById("subjectError").innerText = "Le sujet doit contenir au moins 3 caractères.";
-            document.getElementById("subjectError").classList.remove("hidden");
-            valid = false;
-        }
-
-        // Vérif message
-        const message = document.getElementById("message").value.trim();
-        if (message.length < 10) {
-            document.getElementById("messageError").innerText = "Le message doit contenir au moins 10 caractères.";
-            document.getElementById("messageError").classList.remove("hidden");
-            valid = false;
-        }
-
-        // Si erreurs → bloque l'envoi
-        if (!valid) {
-            e.preventDefault();
-        }
-    });
-
-    // Livewire : cacher message succès après 5s
     document.addEventListener('livewire:init', () => {
         Livewire.on('contact-sent', () => {
             setTimeout(() => {
