@@ -1,10 +1,16 @@
 <?php
 
 
-function replaceAbsoluteUrlsWithRelative($content)
-{
-    $baseUrl = config('app.url');
-    return preg_replace('/(href|src)=["\']' . preg_quote($baseUrl, '/') . '([^"\']+)["\']/', '$1="$2"', $content);
+/**
+ * Protège la déclaration de la fonction pour éviter les erreurs de "redeclaration".
+ * C'était la cause de votre erreur fatale.
+ */
+if (! function_exists('replaceAbsoluteUrlsWithRelative')) {
+    function replaceAbsoluteUrlsWithRelative($content)
+    {
+        $baseUrl = config('app.url');
+        return preg_replace('/(href|src)=["\']' . preg_quote($baseUrl, '/') . '([^"\']+)["\']/', '$1="$2"', $content);
+    }
 }
 
 if (!function_exists('generateRandomDateInRange')) {
